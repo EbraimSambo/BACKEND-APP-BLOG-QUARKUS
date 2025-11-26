@@ -1,17 +1,21 @@
 package org.acme.features.post.adapters.in.rest;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.acme.features.post.domain.ports.CreatePostUseCase;
 import org.acme.features.post.domain.ports.PostService;
+import org.acme.root.domain.pagination.DataPagination;
 
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -30,11 +34,10 @@ public class PostController {
 
     @POST
     public Response createPost(@Valid PostRequest request) {
-        var command = new org.acme.features.post.domain.ports.CreatePostUseCase.CreatePostCommand(
-            request.title(),
-            request.content(),
-            request.bannerPath()
-        );
+        var command = new CreatePostUseCase.CreatePostCommand(
+                request.title(),
+                request.content(),
+                request.bannerPath());
         return Response.status(201).entity(createPostUseCase.createPost(command)).build();
     }
 
@@ -42,6 +45,15 @@ public class PostController {
     @Path("/{id}")
     public Response getPostById(@PathParam("id") UUID id) {
         return Response.ok(postService.findById(id)).build();
+    }
+
+    @GET
+    public Response getAllPosts(
+            @DefaultValue("0") @QueryParam("page") int page,
+            @DefaultValue("10") @QueryParam("size") int size,
+            @QueryParam("query") String query) {
+        var dataPagination = new DataPagination(page, size, Optional.ofNullable(query));
+        return Response.ok(postService.findAll(dataPagination)).build();
     }
 
 }

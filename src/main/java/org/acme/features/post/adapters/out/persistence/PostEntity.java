@@ -106,7 +106,7 @@ public class PostEntity extends PanacheEntityBase {
         this.deletedAt = deletedAt;
     }
 
-    
+
 
 
 }

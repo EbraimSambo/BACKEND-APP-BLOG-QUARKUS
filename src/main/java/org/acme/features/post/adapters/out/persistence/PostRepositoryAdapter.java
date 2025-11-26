@@ -6,6 +6,9 @@ import java.util.UUID;
 import org.acme.features.post.adapters.out.mappers.PostMapper;
 import org.acme.features.post.domain.entity.Post;
 import org.acme.features.post.domain.ports.PostRepository;
+import org.acme.root.domain.pagination.DataPagination;
+import org.acme.root.domain.pagination.Pagination;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -30,6 +33,25 @@ public class PostRepositoryAdapter implements PostRepository{
         entity.setBannerPath(post.getBannerPath());
         entity.persist();
         return PostMapper.toDomain(entity);
+    }
+
+    @Override
+    public Pagination<Post> findAll(DataPagination dataPagination) {
+        PanacheQuery<PostEntity> query = PostEntity.findAll();
+        if (dataPagination.query().isPresent()) {
+            query = PostEntity.find("title LIKE ?1 OR content LIKE ?1", "%" + dataPagination.query().get() + "%");
+        }
+        var page = query.page(dataPagination.page(), dataPagination.size());
+        var posts = page.list().stream()
+                .map(PostMapper::toDomain)
+                .toList();
+        return new Pagination<Post>(
+                dataPagination.page(),
+                dataPagination.size(),
+                page.count(),
+                page.pageCount(),
+                posts
+        );
     }
 
 

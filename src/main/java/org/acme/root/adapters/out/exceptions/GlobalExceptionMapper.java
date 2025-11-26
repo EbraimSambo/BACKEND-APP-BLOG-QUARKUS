@@ -25,7 +25,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable>{
         if (exception instanceof IllegalArgumentException e){
                return build(Response.Status.BAD_REQUEST, "BAD_REQUEST", e.getMessage());
         }
-        String errorMessage = exception.getMessage() != null ? exception.getMessage() : "Erro interno: " + exception.getClass().getSimpleName();
+        String errorMessage = exception.getMessage() != null ? exception.getMessage() : "Internal Server Error: " + exception.getClass().getSimpleName();
         return build(Response.Status.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", errorMessage);
     }
 

@@ -7,6 +7,7 @@ import org.acme.features.post.domain.entity.Post;
 import org.acme.features.post.domain.ports.PostRepository;
 import org.acme.features.post.domain.ports.PostService;
 import org.acme.root.domain.exceptions.NotfoundException;
+import org.acme.root.domain.pagination.Pagination;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -20,5 +21,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post findById(UUID id) {
         return this.postRepository.findById(id).orElseThrow(() -> new NotfoundException("Post not found"));
+    }
+
+    @Override
+    public Pagination<Post> findAll(org.acme.root.domain.pagination.DataPagination dataPagination) {
+        return this.postRepository.findAll(dataPagination);
     }
 }

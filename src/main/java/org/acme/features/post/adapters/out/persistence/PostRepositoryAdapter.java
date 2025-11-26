@@ -8,6 +8,7 @@ import org.acme.features.post.domain.entity.Post;
 import org.acme.features.post.domain.ports.PostRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class PostRepositoryAdapter implements PostRepository{
@@ -21,6 +22,7 @@ public class PostRepositoryAdapter implements PostRepository{
     }
 
     @Override
+    @Transactional
     public Post save(Post post) {
         var entity = new PostEntity();
         entity.setTitle(post.getTitle());

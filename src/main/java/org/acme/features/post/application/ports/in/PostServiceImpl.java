@@ -1,6 +1,5 @@
 package org.acme.features.post.application.ports.in;
 
-
 import java.util.UUID;
 
 import org.acme.features.post.domain.entity.Post;
@@ -14,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+
     public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
@@ -26,5 +26,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Pagination<Post> findAll(org.acme.root.domain.pagination.DataPagination dataPagination) {
         return this.postRepository.findAll(dataPagination);
+    }
+
+    @Override
+    public Post findBySlug(String slug) {
+        return this.postRepository.findBySlug(slug).orElseThrow(() -> new NotfoundException("Post not found"));
     }
 }

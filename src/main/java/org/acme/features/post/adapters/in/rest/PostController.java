@@ -20,6 +20,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/posts")
+
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PostController {
@@ -39,6 +40,12 @@ public class PostController {
                 request.content(),
                 request.bannerPath());
         return Response.status(201).entity(createPostUseCase.createPost(command)).build();
+    }
+
+    @GET
+    @Path("/slug/{slug}")
+    public Response getPostBySlug(@PathParam("slug") String slug) {
+        return Response.ok(postService.findBySlug(slug)).build();
     }
 
     @GET

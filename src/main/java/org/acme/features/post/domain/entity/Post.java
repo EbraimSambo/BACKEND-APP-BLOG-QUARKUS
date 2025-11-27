@@ -7,7 +7,9 @@ public class Post {
     private UUID id;
     private int internalId;
     private String title;
+    private String excerpt;
     private String content;
+    private String slug;
     private String bannerPath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -69,6 +71,22 @@ public class Post {
 
     public void setBannerPath(String bannerPath) {
         this.bannerPath = bannerPath;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public String getExcerpt() {
+        return excerpt;
+    }
+
+    public void setExcerpt(String excerpt) {
+        this.excerpt = excerpt;
     }
 
 }

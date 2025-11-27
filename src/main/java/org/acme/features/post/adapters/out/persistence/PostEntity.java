@@ -16,9 +16,16 @@ public class PostEntity extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "internal_id", nullable = false, unique = true, updatable = false)
     private int internalId;
+
+    @Column(nullable = false, unique = true)
+    private String slug;
+
+    @Column(nullable = true)
+    private String excerpt;
+
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT", length = 65535)
     private String content;
     @Column(name = "banner_path")
     private String bannerPath;
@@ -107,6 +114,20 @@ public class PostEntity extends PanacheEntityBase {
     }
 
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
 
 
+    public String getExcerpt() {
+        return excerpt;
+    }
+
+    public void setExcerpt(String excerpt) {
+        this.excerpt = excerpt;
+    }
 }

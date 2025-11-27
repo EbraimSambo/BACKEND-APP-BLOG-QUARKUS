@@ -10,5 +10,6 @@ import org.acme.root.domain.pagination.Pagination;
 public interface PostRepository {
     Post save(Post post);
     Optional<Post> findById(UUID id);
+    Optional<Post> findBySlug(String slug);
     Pagination<Post> findAll(DataPagination dataPagination);
 }

@@ -8,6 +8,8 @@ import org.acme.features.post.domain.ports.PostService;
 import org.acme.root.domain.exceptions.NotfoundException;
 import org.acme.root.domain.pagination.Pagination;
 
+import io.quarkus.cache.CacheInvalidate;
+import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
@@ -19,6 +21,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @CacheResult(cacheName = "post-by-id")
     public Post findById(UUID id) {
         return this.postRepository.findById(id).orElseThrow(() -> new NotfoundException("Post not found"));
     }
@@ -29,7 +32,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @CacheResult(cacheName = "post-by-slug")
     public Post findBySlug(String slug) {
         return this.postRepository.findBySlug(slug).orElseThrow(() -> new NotfoundException("Post not found"));
+    }
+
+    @CacheInvalidate(cacheName = "post-by-id")
+    @CacheInvalidate(cacheName = "post-by-slug")
+    public void invalidateCaches(UUID id, String slug) {
+        // não precisa implementar nada
     }
 }

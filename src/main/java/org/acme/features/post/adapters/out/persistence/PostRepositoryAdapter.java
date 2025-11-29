@@ -43,9 +43,11 @@ public class PostRepositoryAdapter implements PostRepository {
     @Override
     public Pagination<Post> findAll(DataPagination dataPagination) {
         PanacheQuery<PostEntity> query = PostEntity.findAll();
+
         if (dataPagination.query().isPresent()) {
             query = PostEntity.find("title LIKE ?1 OR content LIKE ?1", "%" + dataPagination.query().get() + "%");
         }
+
         var page = query.page(dataPagination.page(), dataPagination.size());
         var posts = page.list().stream()
                 .map(PostMapper::toDomain)

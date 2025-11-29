@@ -8,7 +8,7 @@ import org.acme.features.post.domain.ports.PostRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class CreatePostUseCaseImpl implements CreatePostUseCase{
+public class CreatePostUseCaseImpl implements CreatePostUseCase {
 
     private final PostRepository postRepository;
 
@@ -17,13 +17,11 @@ public class CreatePostUseCaseImpl implements CreatePostUseCase{
     }
 
     @Override
-    public Post createPost(CreatePostCommand command) {
+    public Post execute(CreatePostCommand command) {
         return this.postRepository.save(
-            PostMapper.toEntityFromCommand(
-                command.title(),
-                command.content(),
-                command.bannerPath()
-            )
-        );
+                PostMapper.toEntityFromCommand(
+                        command.title(),
+                        command.content(),
+                        command.bannerPath()));
     }
 }

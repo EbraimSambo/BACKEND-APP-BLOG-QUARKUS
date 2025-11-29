@@ -3,6 +3,7 @@ package org.acme.features.post.adapters.in.rest;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.acme.features.post.adapters.out.mappers.PostMapper;
 import org.acme.features.post.domain.ports.CreatePostUseCase;
 import org.acme.features.post.domain.ports.PostService;
 import org.acme.root.domain.pagination.DataPagination;
@@ -35,11 +36,8 @@ public class PostController {
 
     @POST
     public Response createPost(@Valid PostRequest request) {
-        var command = new CreatePostUseCase.CreatePostCommand(
-                request.title(),
-                request.content(),
-                request.bannerPath());
-        return Response.status(201).entity(createPostUseCase.createPost(command)).build();
+        return Response.status(201).entity(createPostUseCase.execute(
+                PostMapper.toCreatePostCommand(request))).build();
     }
 
     @GET
@@ -59,8 +57,8 @@ public class PostController {
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("10") @QueryParam("size") int size,
             @QueryParam("query") String query) {
-        var dataPagination = new DataPagination(page, size, Optional.ofNullable(query));
-        return Response.ok(postService.findAll(dataPagination)).build();
+        return Response.ok(postService.findAll(
+                new DataPagination(page, size, Optional.ofNullable(query)))).build();
     }
 
 }

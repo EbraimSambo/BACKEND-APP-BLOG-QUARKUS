@@ -1,8 +1,10 @@
 package org.acme.features.post.adapters.out.mappers;
 
+import org.acme.features.post.adapters.in.rest.PostRequest;
 import org.acme.features.post.adapters.out.persistence.PostEntity;
 import org.acme.features.post.application.helpers.PostUtil;
 import org.acme.features.post.domain.entity.Post;
+import org.acme.features.post.domain.ports.CreatePostUseCase;
 
 public class PostMapper {
 
@@ -53,6 +55,15 @@ public class PostMapper {
         entity.setExcerpt(post.getExcerpt());
         entity.persist();
         return PostMapper.toDomain(entity);
+    }
+
+    public static CreatePostUseCase.CreatePostCommand toCreatePostCommand(PostRequest request) {
+        var command = new CreatePostUseCase.CreatePostCommand(
+                request.title(),
+                request.content(),
+                request.bannerPath(),
+                request.excerpt());
+        return command;
     }
 
 }

@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.acme.features.post.domain.entity.Post;
@@ -32,7 +31,6 @@ public class PostControllerTest {
 
     @Test
     void testCreatePost() {
-        var command = new CreatePostUseCase.CreatePostCommand("title", "content", "banner", Optional.empty());
         var post = new Post();
         post.setId(UUID.randomUUID());
         when(createPostUseCase.execute(any())).thenReturn(post);
